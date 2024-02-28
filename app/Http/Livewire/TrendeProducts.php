@@ -13,14 +13,15 @@ class TrendeProducts extends Component
     {
 
         //get 6 products that has most likes
-
-        $trendeProducts =likes::select('product_id', DB::raw('count(product_id) as counts'))
+        $trendeProducts = likes::select('product_id', DB::raw('count(product_id) as counts'))
         ->groupBy('product_id')
-        ->latest()
+        ->orderByDesc(DB::raw('MAX(created_at)'))
         ->where('created_at', '>=', now()->subMonth())
-        ->take(6)->get();
-        return view('livewire.trende-products',[
-            'trendeProducts' => $trendeProducts
-        ]);
+        ->take(6)
+        ->get();
+    
+    return view('livewire.trende-products', [
+        'trendeProducts' => $trendeProducts
+    ]);    
     }
 }
